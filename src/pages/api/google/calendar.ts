@@ -24,7 +24,10 @@ export default async function handler(req: any, res: any) {
         }
         ];
         const responses = await Promise.all(eventConfigs.map(config => calendar.events.list(config)));
-        res.status(200).json(responses)
+        res.status(200).json(responses.map(response => ({
+            data: response.data,
+            status: response.status
+        })))
     } catch (error: any) {
         res.status(error?.status ?? 400).json({ message: error?.message })
     }
