@@ -2,6 +2,7 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import { useEffect, useState } from 'react';
+import { CONFIGURATIONS } from '@/constants';
 
 const EVENT_BG_COLORS: { [key in number]: string } = {
     0: '#2ab7ca',
@@ -13,7 +14,7 @@ export default function Calendar() {
     useEffect(() => {
         async function fetchEvents() {
             try {
-                const response = await fetch(`http://localhost:3000/api/google/calendar`);
+                const response = await fetch(`${CONFIGURATIONS.APP_URL}/api/google/calendar`);
                 const data = await response.json();
                 const newEvents: any[] = [];
                 data?.forEach((dataItem: any, index: number) => {
