@@ -1,5 +1,4 @@
 import { google } from 'googleapis';
-import axios from 'axios';
 
 export const oauth2Client = new google.auth.OAuth2(
     process.env.GG_CLIENT_ID,
