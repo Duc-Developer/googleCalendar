@@ -3,6 +3,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import { useEffect, useState } from 'react';
 import { CONFIGURATIONS } from '@/constants';
+import { DatesSetArg } from '@fullcalendar/core/index.js';
 
 const EVENT_BG_COLORS: { [key in number]: string } = {
     0: '#2ab7ca',
@@ -11,10 +12,11 @@ const EVENT_BG_COLORS: { [key in number]: string } = {
 export default function Calendar() {
     const [events, setEvents] = useState<any[]>([]);
     const [errors, setErrors] = useState({ message: '' });
+    const [dates, setDates] = useState({ start: 0, end: 0, limit: 100 });
     useEffect(() => {
         async function fetchEvents() {
             try {
-                const response = await fetch(`${CONFIGURATIONS.APP_URL}/api/google/calendar`);
+                const response = await fetch(`${CONFIGURATIONS.APP_URL}/api/google/calendar?start=${dates.start}&end=${dates.end}&limit=${dates.limit}`);
                 const data = await response.json();
                 const newEvents: any[] = [];
                 data?.forEach((dataItem: any, index: number) => {
@@ -43,8 +45,18 @@ export default function Calendar() {
                 setErrors({ message: 'Something was wrong!' })
             }
         };
-        fetchEvents();
-    }, []);
+        if (dates.start > 0 && dates.end > 0) fetchEvents();
+    }, [dates]);
+
+    const handleChangeDate = (dateInfo: DatesSetArg) => {
+        const { start, end } = dateInfo;
+        const newDates = {
+            ...dates,
+            start: start.getTime(),
+            end: end.getTime(),
+        };
+        setDates(newDates);
+    };
 
     if (errors?.message) return <p className='text-center text-red-600 font-bold text-lg'>
         {errors?.message}
@@ -73,6 +85,8 @@ export default function Calendar() {
                     if (info.event.url) window.open(info.event.url);
                 }}
                 height='100%'
+                datesSet={handleChangeDate}
+                firstDay={1}
             />
         </div>
     )
