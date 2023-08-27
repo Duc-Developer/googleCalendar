@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import { useEffect, useState } from 'react';
 import { CONFIGURATIONS } from '@/constants';
 import { DatesSetArg } from '@fullcalendar/core/index.js';
+import Link from 'next/link';
 
 const EVENT_BG_COLORS: { [key in number]: string } = {
     0: '#2ab7ca',
@@ -58,9 +59,16 @@ export default function Calendar() {
         setDates(newDates);
     };
 
-    if (errors?.message) return <p className='text-center text-red-600 font-bold text-lg'>
-        {errors?.message}
-    </p>;
+    if (errors?.message) return <>
+        <div className='text-center mt-8'>
+            <Link href='/'>
+                <span className="hover:underline hover:text-sky-400">Go Home</span>
+            </Link>
+        </div>
+        <p className='text-center text-red-600 font-bold text-lg'>
+            {errors?.message}
+        </p>
+    </>;
     return (
         <div className='p-4 h-screen'>
             <FullCalendar
