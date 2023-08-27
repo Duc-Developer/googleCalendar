@@ -6,19 +6,25 @@ const calendar = google.calendar({
 })
 export default async function handler(req: any, res: any) {
     try {
+        const { start, end, limit = 200 } = req.query;
+        if (!start || !end) {
+            throw new Error();
+        }
         const eventConfigs = [{
             calendarId: 'ductt2@vmogroup.com',
             auth: oauth2Client,
-            timeMin: new Date().toISOString(),
-            maxResults: 10,
+            timeMin: new Date(parseInt(start)).toISOString(),
+            timeMax: new Date(parseInt(end)).toISOString(),
+            maxResults: parseInt(limit),
             singleEvents: true,
             orderBy: 'startTime',
         },
         {
             calendarId: 'primary',
             auth: oauth2Client,
-            timeMin: new Date().toISOString(),
-            maxResults: 10,
+            timeMin: new Date(parseInt(start)).toISOString(),
+            timeMax: new Date(parseInt(end)).toISOString(),
+            maxResults: parseInt(limit),
             singleEvents: true,
             orderBy: 'startTime',
         }
