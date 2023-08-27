@@ -1,5 +1,5 @@
 import { google } from 'googleapis';
-import { oauth2Client } from '.';
+import { oauth2Client } from '..'
 const calendar = google.calendar({
     version: "v3",
     auth: process.env.GG_API_KEY
